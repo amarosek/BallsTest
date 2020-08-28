@@ -11,8 +11,6 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] float secondsBetweendspawn = 0.5f;
 
     Vector3 randomSpawnPosition;
-    Vector3 spawnPoint;
-    Vector3 screenBounds;
 
     public int spawnedBalls { get; private set; } = 0;
 
@@ -21,8 +19,6 @@ public class BallSpawner : MonoBehaviour
 
     void Start()
     {
-        screenBounds = mainCamera.ScreenToWorldPoint(spawnPoint);
-
         StartCoroutine(SpawnBalls());
     }
 
@@ -38,13 +34,16 @@ public class BallSpawner : MonoBehaviour
     {
         while (true)
         {
+            // set spawn inside camera view
             float height = mainCamera.orthographicSize;
             float width = mainCamera.orthographicSize * mainCamera.aspect + 1;
             randomSpawnPosition = new Vector3(Random.Range(-width, width), Random.Range(-height, height), Random.Range(mainCamera.nearClipPlane - 5, mainCamera.farClipPlane - 20));
 
+            // create new ball
             var newBall = Instantiate(ballPrefab,randomSpawnPosition, Quaternion.identity);
             newBall.transform.parent = newBallTransform;
 
+            // count created balls
             spawnedBalls++;
 
             yield return new WaitForSeconds(secondsBetweendspawn);
