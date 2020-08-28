@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallGravity : MonoBehaviour
@@ -25,8 +24,8 @@ public class BallGravity : MonoBehaviour
 
     void FixedUpdate()
     {
-        // if statement for balls gravity logic when under 100 balls in scene
-        if (GameObject.Find("Balls").GetComponent<BallSpawner>().spawnedBalls < 100)
+        // if statement for balls gravity logic when under 150 balls in scene
+        if (GameObject.Find("Balls").GetComponent<BallSpawner>().spawnedBalls < 160)
         {
 
             // adding artificial "gravity" to every object appearing in scene
@@ -44,7 +43,7 @@ public class BallGravity : MonoBehaviour
             {
                 Vector3 forceDirection = transform.position - collider.transform.position;
                 GetComponent<Rigidbody>().AddForce(forceDirection.normalized * pullForce * Time.fixedDeltaTime);
-                GetComponent<BallGravity>().collided = true;
+                collided = true;
             }
         }
     }
@@ -71,9 +70,9 @@ public class BallGravity : MonoBehaviour
                 radius = Math.Pow((3 * volume) / (4 * Mathf.PI), 1D / 3);
                 newBall.transform.localScale = new Vector3((float)radius, (float)radius, (float)radius);
 
-                newBall.GetComponent<Rigidbody>().velocity = new Vector3(gameObject.transform.localScale.x + script.transform.localScale.x,
-                                                                         gameObject.transform.localScale.y + script.transform.localScale.y,
-                                                                         gameObject.transform.localScale.z + script.transform.localScale.z);
+                newBall.GetComponent<Rigidbody>().velocity = new Vector3(UnityEngine.Random.Range(-2,2), UnityEngine.Random.Range(-2, 2), UnityEngine.Random.Range(-2, 2));
+                                                                         
+                                                                         
                 newBall.GetComponent<Rigidbody>().mass = gameObject.GetComponent<Rigidbody>().mass + script.GetComponent<Rigidbody>().mass;
                 newBall.GetComponent<BallGravity>().mergesCount++;
                 newBall.GetComponent<BallGravity>().pullForce = newBall.GetComponent<Rigidbody>().mass;
@@ -86,8 +85,10 @@ public class BallGravity : MonoBehaviour
                     // destroy potential ball with mass bigger than 50
                     Destroy(newBall);
 
-                    // create 50 balls from last collision
-                    for (int i = 0; i < 50; i++)
+                    float ballAmount = gameObject.GetComponent<Rigidbody>().mass + script.GetComponent<Rigidbody>().mass;
+
+                    // create balls from last collision
+                    for (int i = 0; i < ballAmount; i++)
                     {
 
                         // disable collisions for 0.5s 

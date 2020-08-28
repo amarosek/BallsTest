@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
@@ -15,8 +14,6 @@ public class BallSpawner : MonoBehaviour
     public int spawnedBalls { get; private set; } = 0;
 
 
-
-
     void Start()
     {
         StartCoroutine(SpawnBalls());
@@ -24,7 +21,7 @@ public class BallSpawner : MonoBehaviour
 
     void Update()
     {
-        if (spawnedBalls >= 100)
+        if (spawnedBalls >= 160)
         { 
             StopAllCoroutines(); 
         }
